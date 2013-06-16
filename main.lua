@@ -99,8 +99,8 @@ function initialiseLevel(board, player, level)
     
     -- x_grid and y_grid represent the player's position on the grid.
     -- hard coded (for now)
-    player.x_grid = 2
-    player.y_grid = 4
+    player.x_grid = 4
+    player.y_grid = 2
     
     player.x_pos = 3*board.tile_width
     player.y_pos = 3*board.tile_height
