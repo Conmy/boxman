@@ -5,9 +5,10 @@ gridUtility = require "gridUtility"
 local level = {}
 
 -- LOAD
-function level.load(levelNumber)
+function level.load(states, levelNumber)
   
   
+  screenState = states
   -- TODO: take information from a file or something
   if levelNumber == 1 then
     
@@ -16,8 +17,9 @@ function level.load(levelNumber)
   block = love.graphics.newImage("assets/tile.png")
   playerImage = love.graphics.newImage("assets/man.png")
   goal = love.graphics.newImage("assets/goal.png")
+  wall = love.graphics.newImage("assets/wall.png")
   -- add them to a collection (table, I think they're called.)
-  assets = {bgImage=bgImage, block=block, playerImage=playerImage, goal=goal}
+  assets = {bgImage=bgImage, block=block, playerImage=playerImage, goal=goal, wall=wall}
   
   -- tile size dictated by the background image.
   -- this adds a dependency that all images are the same dimensions
@@ -80,18 +82,43 @@ function level.load(levelNumber)
     -- This should probably be set up in a collection.
     board.grid[1][1] = 2
     board.grid[2][2] = 2
-    board.grid[5][5] = 2
+    board.grid[4][4] = 2
+    board.grid[5][5] = 1
+    
     
     -- set the goal points.
     -- goals are on a separate grid but will still have a unique identifier
     -- for when it is turned into a collection.
     board.goalGrid[2][1] = 3    
+    board.goalGrid[2][2] = 3
+    board.goalGrid[2][3] = 3
   end
 
 end
 
-
 -- UPDATE
+function level.update(gc, dt)
+  
+  if isWinner() then
+    gc.screen = screenState.WINNER_SCREEN
+  end
+end
+
+function isWinner()
+  
+  winner = true
+  for i=0,board.size_x do
+    for j=0,board.size_y do
+      if board.goalGrid[i][j] == 3 and board.grid[i][j] ~= 2 then
+        winner = false
+        return winner
+      end
+    end 
+  end
+  return winner
+  
+end
+
 
 -- DRAW
 function level.draw()
@@ -104,7 +131,7 @@ function level.draw()
 end
 
 -- KEYPRESS
-function level.keyPressed(key)
+function level.keyPressed(gc, key)
   
   if key == "up" then
     if (player.y_grid - 1) >= 0 then 
@@ -137,6 +164,10 @@ function movePlayer(newX, newY)
 
   xdiff = newX - player.x_grid
   ydiff = newY - player.y_grid
+  
+  if board.grid[newX][newY] == 1 then 
+    return false
+  end
   
   if (xdiff == 1 or xdiff == -1) and ydiff == 0 then
     if (board.grid[newX][newY] ~= 2) then -- 2 is a box?
@@ -175,6 +206,9 @@ function moveBox(x, y, xdiff, ydiff)
   
   -- assert that x, y is a block.
   if board.grid[x][y] ~= 2 then return false end
+  -- if position to move the block into is a wall, don't do it.
+  if board.grid[x+xdiff][y+ydiff] == 1 then return false end
+  
 
   if (xdiff == 1  or xdiff == -1) and ydiff == 0 then
     local newX = x + xdiff
@@ -223,7 +257,7 @@ function drawBoard(board)
         love.graphics.draw(board.assets.bgImage, i*board.tile_width, j*tile_height)
       elseif board.grid[i][j] == 1 then
         -- draw a wall
-        --love.graphics.draw(board.assets.block, i*board.tile_width, j*board.tile_height)
+        love.graphics.draw(board.assets.wall, i*board.tile_width, j*board.tile_height)
       elseif board.grid[i][j] == 2 then
         -- draw a box
         love.graphics.draw(board.assets.block, i*board.tile_width, j*board.tile_height)
