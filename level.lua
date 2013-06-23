@@ -59,11 +59,11 @@ function level.load(states, levelNumber)
     
     -- x_grid and y_grid represent the player's position on the grid.
     -- hard coded (for now)
-    player.x_grid = 4
-    player.y_grid = 2
+    player.x_grid = 1
+    player.y_grid = 1
     
-    player.x_pos = 3*board.tile_width
-    player.y_pos = 3*board.tile_height
+    player.x_pos = 1*board.tile_width
+    player.y_pos = 1*board.tile_height
     
     -- set player speed for duration between animations.
     player.speed = 1
@@ -80,18 +80,62 @@ function level.load(states, levelNumber)
     -- 2 = box
     -- 3 = goal
     -- This should probably be set up in a collection.
-    board.grid[1][1] = 2
-    board.grid[2][2] = 2
-    board.grid[4][4] = 2
+    
+    board.grid[0][0] = 1
+    board.grid[0][1] = 1
+    board.grid[0][2] = 1
+    board.grid[0][3] = 1
+    board.grid[0][4] = 1
+    board.grid[0][5] = 1
+
+    board.grid[1][0] = 0
+    board.grid[1][1] = 0
+    board.grid[1][2] = 0
+    board.grid[1][3] = 0
+    board.grid[1][4] = 0
+    board.grid[1][5] = 1
+    
+    board.grid[2][0] = 0
+    board.grid[2][1] = 0
+    board.grid[2][2] = 1
+    board.grid[2][3] = 1
+    board.grid[2][4] = 0
+    board.grid[2][5] = 1
+    
+    board.grid[3][0] = 2
+    board.grid[3][1] = 2
+    board.grid[3][2] = 2
+    board.grid[3][3] = 0
+    board.grid[3][4] = 0
+    board.grid[3][5] = 1
+    
+    board.grid[4][0] = 0
+    board.grid[4][1] = 2
+    board.grid[4][2] = 0
+    board.grid[4][3] = 1
+    board.grid[4][4] = 0
+    board.grid[4][5] = 1
+    
+    board.grid[5][0] = 0
+    board.grid[5][1] = 0
+    board.grid[5][2] = 0
+    board.grid[5][3] = 0
+    board.grid[5][4] = 0
     board.grid[5][5] = 1
     
+    board.grid[6][0] = 1
+    board.grid[6][1] = 1
+    board.grid[6][2] = 1
+    board.grid[6][3] = 1
+    board.grid[6][4] = 1
+    board.grid[6][5] = 1
     
     -- set the goal points.
     -- goals are on a separate grid but will still have a unique identifier
     -- for when it is turned into a collection.
-    board.goalGrid[2][1] = 3    
-    board.goalGrid[2][2] = 3
-    board.goalGrid[2][3] = 3
+    board.goalGrid[3][3] = 3    
+--    board.goalGrid[2][2] = 3
+--    board.goalGrid[2][3] = 3
   end
 
 end
