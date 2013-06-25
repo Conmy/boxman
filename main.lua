@@ -15,7 +15,7 @@ function love.load()
   printDebug = true
 
   gameController.screen = screenState.LEVEL_SCREEN
-  level.load(screenState, 1)
+  level.load(screenState, 2)
 
 end
 

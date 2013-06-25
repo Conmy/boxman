@@ -136,6 +136,137 @@ function level.load(states, levelNumber)
     board.goalGrid[3][3] = 3    
 --    board.goalGrid[2][2] = 3
 --    board.goalGrid[2][3] = 3
+    
+	elseif levelNumber == 2 then
+      -- get image resources.
+      bgImage = love.graphics.newImage("assets/grass.png")
+      block = love.graphics.newImage("assets/tile.png")
+      playerImage = love.graphics.newImage("assets/man.png")
+      goal = love.graphics.newImage("assets/goal.png")
+      wall = love.graphics.newImage("assets/wall.png")
+      -- add them to a collection (table, I think they're called.)
+      assets = {bgImage=bgImage, block=block, playerImage=playerImage, goal=goal, wall=wall}
+  
+      -- tile size dictated by the background image.
+      -- this adds a dependency that all images are the same dimensions
+      -- as the bgImage to fit correctly in the tiles of the grid.
+      tile_width = bgImage:getWidth()
+      tile_height = bgImage:getHeight()
+  
+      grid = {}
+  
+      board = {
+        grid=grid, 
+        goalGrid=grid,
+        assets=assets, 
+        tile_width=tile_width, tile_height=tile_height, 
+        size_x, size_y}
+  
+      player = {
+        playerImage=playerImage,
+        x_grid=0, y_grid=0,
+        x_pos=0, y_pos=0,
+        speed=10, moving=false, allowInput=false}
+  
+      -- level constants. (hard coded for now)
+      x = 8
+      y = 6
+    
+      -- set up the grid for the board.
+      board.grid = gridUtility.getGrid(x, y)
+      board.goalGrid = gridUtility.getGrid(x, y)
+      -- assets is set from load (for now)
+      -- tile height and width would be set along with the image asset.
+      board.size_x = x
+      board.size_y = y
+    
+      -- set player objects
+      -- player image set from load (for now) 
+     
+      -- x_grid and y_grid represent the player's position on the grid.
+      -- hard coded (for now)
+      player.x_grid = 3
+      player.y_grid = 3
+    
+      player.x_pos = 1*board.tile_width
+      player.y_pos = 1*board.tile_height
+    
+      -- set player speed for duration between animations.
+      player.speed = 1
+    
+      -- tells the update method when the player is moving.
+      player.moving = false
+    
+      -- allow the user to make an input on the player.
+      player.allowInput = true
+    
+      -- set up stuff on the grid.
+      -- 0 = empty
+      -- 1 = wall
+      -- 2 = box
+      -- 3 = goal
+      -- This should probably be set up in a collection.
+	  board.grid[0][0] = 0
+	  board.grid[0][1] = 0
+	  board.grid[0][2] = 0
+	  board.grid[0][3] = 0
+	  board.grid[0][4] = 0
+	  board.grid[0][5] = 0
+	  
+      board.grid[1][0] = 1
+      board.grid[1][1] = 1
+      board.grid[1][2] = 1
+	  board.grid[1][3] = 0
+      board.grid[1][4] = 1
+	  board.grid[1][5] = 0
+	  
+	  board.grid[2][0] = 0
+      board.grid[2][1] = 0
+      board.grid[2][2] = 0
+	  board.grid[2][3] = 0
+      board.grid[2][4] = 0
+	  board.grid[2][5] = 0
+	  
+	  board.grid[3][0] = 0
+	  board.grid[3][1] = 0
+	  board.grid[3][2] = 1
+	  board.grid[3][3] = 0
+      board.grid[3][4] = 1
+	  board.grid[3][5] = 0
+	  
+	  board.grid[4][0] = 1
+	  board.grid[4][1] = 2
+      board.grid[4][2] = 1
+	  board.grid[4][3] = 3
+      board.grid[4][4] = 1
+	  board.grid[4][5] = 0
+	  
+	  board.grid[5][0] = 0
+	  board.grid[5][1] = 0
+	  board.grid[5][2] = 0
+	  board.grid[5][3] = 1
+	  board.grid[5][4] = 0
+	  board.grid[5][5] = 0
+	  
+	  board.grid[6][0] = 0
+      board.grid[6][1] = 1
+      board.grid[6][2] = 1
+      board.grid[6][3] = 1
+	  board.grid[6][4] = 1
+	  board.grid[6][5] = 0
+	  
+	  board.grid[7][0] = 0
+      board.grid[7][1] = 0
+	  board.grid[7][2] = 0
+      board.grid[7][3] = 0
+	  board.grid[7][4] = 0
+	  board.grid[7][5] = 0
+	
+      -- set the goal points.
+      -- goals are on a separate grid but will still have a unique identifier
+      -- for when it is turned into a collection.
+      board.goalGrid[4][3] = 3
+
   end
 
 end
