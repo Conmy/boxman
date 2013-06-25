@@ -1,5 +1,5 @@
 
 
-gameController = {screen}
+gameController = {screen, levelNumber}
 
 return gameController
