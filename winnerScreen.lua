@@ -8,7 +8,7 @@ function winnerScreen.load(states)
 	
 	screenState = states
 	
-	winnerImage = love.grapics.getImage("assets/winner.png")
+	winnerImage = love.graphics.newImage("assets/winner.png")
 
 end
 
@@ -19,14 +19,15 @@ function winnerScreen.update(gc, dt)
 end
 
 function winnerScreen.draw()
-	love.graphics.draw(0, 0, winnerImage)
+	love.graphics.draw(winnerImage, 0, 0)
 end
 
 
 function winnerScreen.keyPressed(gc, key)
-	if key == "enter" then
+	if key == "return" then
 		gc.screen = screenState.LEVEL_SCREEN
 		gc.levelNumber = gc.levelNumber + 1
+		level.initLevel(gc)
 	end
 end
 

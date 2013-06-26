@@ -5,13 +5,9 @@ gridUtility = require "gridUtility"
 local level = {}
 
 -- LOAD
-function level.load(states, levelNumber)
-  
+function level.load(states, gc)
   
   screenState = states
-  -- TODO: take information from a file or something
-  if levelNumber == 1 then
-    
     -- get image resources.
   bgImage = love.graphics.newImage("assets/grass.png")
   block = love.graphics.newImage("assets/tile.png")
@@ -27,25 +23,96 @@ function level.load(states, levelNumber)
   tile_width = bgImage:getWidth()
   tile_height = bgImage:getHeight()
   
-  grid = {}
+	level.initLevel(gc)
+
+end
+
+-- UPDATE
+function level.update(gc, dt)
   
-  board = {
-    grid=grid, 
-    goalGrid=grid,
-    assets=assets, 
-    tile_width=tile_width, tile_height=tile_height, 
-    size_x, size_y}
+  if isWinner() then
+    gc.screen = screenState.WINNER_SCREEN
+  end
+end
+
+function isWinner()
   
-  player = {
-    playerImage=playerImage,
-    x_grid=0, y_grid=0,
-    x_pos=0, y_pos=0,
-    speed=10, moving=false, allowInput=false}
+  winner = true
+  for i=0,board.size_x do
+    for j=0,board.size_y do
+      if board.goalGrid[i][j] == 3 and board.grid[i][j] ~= 2 then
+        winner = false
+        return winner
+      end
+    end 
+  end
+  return winner
   
-    -- level constants. (hard coded for now)
-    x = 8
-    y = 6
-    
+end
+
+
+-- DRAW
+function level.draw()
+  
+  drawBackgroundImages(board)
+  drawBoard(board)
+  drawGoals(board)
+  drawPlayer(player)
+
+end
+
+-- KEYPRESS
+function level.keyPressed(gc, key)
+  
+  if key == "up" then
+    if (player.y_grid - 1) >= 0 then 
+       movePlayer(player.x_grid, player.y_grid - 1)
+    end
+  elseif key == "down" then
+    if (player.y_grid + 1) < board.size_y then
+       movePlayer(player.x_grid, player.y_grid + 1)
+    end
+  end
+  if key == "left" then
+    if (player.x_grid - 1) >= 0 then
+       movePlayer(player.x_grid - 1, player.y_grid)
+    end 
+  elseif key == "right" then
+    if (player.x_grid + 1) < board.size_x then
+       movePlayer(player.x_grid + 1, player.y_grid)
+    end
+  end
+
+end
+
+
+
+-- OTHER METHODS (private) ((Can LUA have private methods?))
+
+function level.initLevel(gc)
+	
+  -- TODO: take information from a file or something
+  if gc.levelNumber == 1 then
+
+	  grid = {}
+
+	  board = {
+		grid=grid, 
+		goalGrid=grid,
+		assets=assets, 
+		tile_width=tile_width, tile_height=tile_height, 
+		size_x, size_y}
+
+	  player = {
+		playerImage=playerImage,
+		x_grid=0, y_grid=0,
+		x_pos=0, y_pos=0,
+		speed=10, moving=false, allowInput=false}
+
+	  -- level constants. (hard coded for now)
+	  x = 8
+	  y = 6
+
     -- set up the grid for the board.
     board.grid = gridUtility.getGrid(x, y)
     board.goalGrid = gridUtility.getGrid(x, y)
@@ -53,7 +120,7 @@ function level.load(states, levelNumber)
     -- tile height and width would be set along with the image asset.
     board.size_x = x
     board.size_y = y
-    
+  
     -- set player objects
     -- player image set from load (for now) 
     
@@ -137,22 +204,8 @@ function level.load(states, levelNumber)
 --    board.goalGrid[2][2] = 3
 --    board.goalGrid[2][3] = 3
     
-	elseif levelNumber == 2 then
-      -- get image resources.
-      bgImage = love.graphics.newImage("assets/grass.png")
-      block = love.graphics.newImage("assets/tile.png")
-      playerImage = love.graphics.newImage("assets/man.png")
-      goal = love.graphics.newImage("assets/goal.png")
-      wall = love.graphics.newImage("assets/wall.png")
-      -- add them to a collection (table, I think they're called.)
-      assets = {bgImage=bgImage, block=block, playerImage=playerImage, goal=goal, wall=wall}
-  
-      -- tile size dictated by the background image.
-      -- this adds a dependency that all images are the same dimensions
-      -- as the bgImage to fit correctly in the tiles of the grid.
-      tile_width = bgImage:getWidth()
-      tile_height = bgImage:getHeight()
-  
+	elseif gc.levelNumber == 2 then
+      
       grid = {}
   
       board = {
@@ -271,67 +324,6 @@ function level.load(states, levelNumber)
 
 end
 
--- UPDATE
-function level.update(gc, dt)
-  
-  if isWinner() then
-    gc.screen = screenState.WINNER_SCREEN
-  end
-end
-
-function isWinner()
-  
-  winner = true
-  for i=0,board.size_x do
-    for j=0,board.size_y do
-      if board.goalGrid[i][j] == 3 and board.grid[i][j] ~= 2 then
-        winner = false
-        return winner
-      end
-    end 
-  end
-  return winner
-  
-end
-
-
--- DRAW
-function level.draw()
-  
-  drawBackgroundImages(board)
-  drawBoard(board)
-  drawGoals(board)
-  drawPlayer(player)
-
-end
-
--- KEYPRESS
-function level.keyPressed(gc, key)
-  
-  if key == "up" then
-    if (player.y_grid - 1) >= 0 then 
-       movePlayer(player.x_grid, player.y_grid - 1)
-    end
-  elseif key == "down" then
-    if (player.y_grid + 1) < board.size_y then
-       movePlayer(player.x_grid, player.y_grid + 1)
-    end
-  end
-  if key == "left" then
-    if (player.x_grid - 1) >= 0 then
-       movePlayer(player.x_grid - 1, player.y_grid)
-    end 
-  elseif key == "right" then
-    if (player.x_grid + 1) < board.size_x then
-       movePlayer(player.x_grid + 1, player.y_grid)
-    end
-  end
-
-end
-
-
-
--- OTHER METHODS (private) ((Can LUA have private methods?))
 
 
 -- Moves the player if that is possible.

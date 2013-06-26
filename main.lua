@@ -1,6 +1,8 @@
 gridUtility = require "gridUtility"
 level = require "level"
 gameController = require "gameController"
+winnerScreen = require "winnerScreen"
+
 -- #######################################
 
 screenState = { 
@@ -14,35 +16,36 @@ screenState = {
 function love.load()    
   printDebug = true
 
-  gameController.screen = screenState.LEVEL_SCREEN
-  level.load(screenState, 2)
+  gameController.load(screenState.LEVEL_SCREEN)
+  winnerScreen.load(screenState)
+  
+  level.load(screenState, gameController)
 
 end
 
 
 function love.update(dt)
   
---  if gameController.screen == screenState.START_SCREEN then
---  
---  elseif gameController.screen == screenState.WINNER_SCREEN then
---  
---  elseif gameController.screen == screenState.RETRY_SCREEN then
---  
---  elseif gameController.screen == screenState.PAUSE_SCREEN then
---  
---  elseif gameController.screen == screenState.LEVEL_SCREEN then
+  if gameController.screen == screenState.START_SCREEN then
+  
+  elseif gameController.screen == screenState.WINNER_SCREEN then
+  
+  elseif gameController.screen == screenState.RETRY_SCREEN then
+  
+  elseif gameController.screen == screenState.PAUSE_SCREEN then
+  
+  elseif gameController.screen == screenState.LEVEL_SCREEN then
     level.update(gameController, dt)
---  end
+  end
   
   
 end
 
 
 function love.draw()
-  
-  
+
   if gameController.screen == screenState.WINNER_SCREEN then
-    love.graphics.print( "WINNER", 100, 100 ) 
+    winnerScreen.draw() 
   elseif gameController.screen == screenState.LEVEL_SCREEN then
     level.draw()
   end
@@ -55,8 +58,9 @@ function love.draw()
 end
 
 function love.keypressed(key)
-
-  if gameController.screen == screenState.LEVEL_SCREEN then
+  if gameController.screen == screenState.WINNER_SCREEN then
+    winnerScreen.keyPressed(gameController, key)
+  elseif gameController.screen == screenState.LEVEL_SCREEN then
     level.keyPressed(gameController, key)
   end
 end
@@ -79,6 +83,8 @@ function printDebugInfo()
   elseif gameController.screen == screenState.WINNER_SCREEN then
     love.graphics.print( "level screenState: WINNER", 0, 30 )
   end
+  
+  love.graphics.print( "levelNumber: " .. gameController.levelNumber , 0, 40 )
   
   
 end
