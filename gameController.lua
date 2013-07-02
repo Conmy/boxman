@@ -1,14 +1,11 @@
 
-
-gameController = {screen, levelNumber=0}
+gameController = {screen, level, levelNumber}
 
 function gameController.load(startScreen)
-	
-	gameController.screen = startScreen
-	gameController.levelNumber = 1
-	
+
+  gameController.screen = startScreen
+  gameController.levelNumber = 1	
+
 end
-
-
 
 return gameController

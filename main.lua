@@ -1,9 +1,10 @@
+
+
+
 gridUtility = require "gridUtility"
 level = require "level"
 gameController = require "gameController"
 winnerScreen = require "winnerScreen"
-
--- #######################################
 
 screenState = { 
   START_SCREEN = {}, 
@@ -12,6 +13,7 @@ screenState = {
   PAUSE_SCREEN = {}, 
   LEVEL_SCREEN = {}
 }
+
 
 function love.load()    
   printDebug = true
@@ -26,19 +28,9 @@ end
 
 function love.update(dt)
   
-  if gameController.screen == screenState.START_SCREEN then
-  
-  elseif gameController.screen == screenState.WINNER_SCREEN then
-  
-  elseif gameController.screen == screenState.RETRY_SCREEN then
-  
-  elseif gameController.screen == screenState.PAUSE_SCREEN then
-  
-  elseif gameController.screen == screenState.LEVEL_SCREEN then
+  if gameController.screen == screenState.LEVEL_SCREEN then
     level.update(gameController, dt)
-  end
-  
-  
+  end 
 end
 
 
@@ -65,18 +57,19 @@ function love.keypressed(key)
   end
 end
 
-
--- REST OF CODE
--- ################################################################################################
--- DRAW METHODS
--- ################################################################################################
-
+-- ---------------------------------------------------------------------
+-- Debug stuff. TODO: Turn into a class/module of some sort to 
+-- centralise it.
+-- ---------------------------------------------------------------------
 
 function printDebugInfo()
   
-  love.graphics.print( "x_pos: " .. player.x_pos .. " y_pos: " .. player.y_pos, 0, 0 )
-  love.graphics.print( "x_grid: " .. player.x_grid .. " y_grid: " .. player.y_grid, 0, 10 )
-  love.graphics.print( "moving = " .. booleanToString(player.moving), 0, 20)
+  love.graphics.print( 
+    "x_pos: " .. player.x_pos .. " y_pos: " .. player.y_pos, 0, 0 )
+  love.graphics.print( 
+    "x_grid: " .. player.x_grid .. " y_grid: " .. player.y_grid, 0, 10 )
+  love.graphics.print( 
+    "moving = " .. booleanToString(player.moving), 0, 20)
   
   if gameController.screen == screenState.LEVEL_SCREEN then
     love.graphics.print( "level screenState: LEVEL" , 0, 30 )
@@ -84,8 +77,8 @@ function printDebugInfo()
     love.graphics.print( "level screenState: WINNER", 0, 30 )
   end
   
-  love.graphics.print( "levelNumber: " .. gameController.levelNumber , 0, 40 )
-  
+  love.graphics.print(
+    "levelNumber: " .. gameController.levelNumber , 0, 40 )
   
 end
 
