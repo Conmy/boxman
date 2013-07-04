@@ -1,7 +1,6 @@
+
 -- Declare.
 local gridUtility = {}
-
--- Methods go here.
 
 function gridUtility.getGrid(x, y)
   local localgrid = {}
